@@ -1,18 +1,43 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlashList } from '@shopify/flash-list'
 import { TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
+import AxiosInstance from '@/helpers/AxiosInstance';
 
 const ListProd = (props) => {
     const {
         title,
-        data,
+        onPress,
         more,
+        type
     } = props;
 
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const getProduct = async () => {
+            try {
+                setLoading(true);
+                const res = await AxiosInstance().get(`prod/prodByType?type=${type}`);
+
+                if(res && res.products){
+                    setProducts(res.products);
+                }else{
+                    console.log("không tìm thấy sản phẩm")
+                }
+            } catch (error) {
+                console.log(error);
+            } finally{
+                setLoading(false);
+            }
+        };
+        getProduct();
+    }, [type]);
+
     const formatCurrency = (amount) => {
-        return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ";
     };
 
     const renderTrees = ({ item, index }) => {
@@ -20,15 +45,16 @@ const ListProd = (props) => {
             return (
                 <TouchableOpacity style={[styles.prodContainer,
                 index % 2 != 0 && { position: 'absolute', right: 0 }
-                ]}>
+                ]}
+                onPress={() => onPress(item._id)}>
 
                     <View style={styles.imgProd}>
-                        <Image source={item.img} style={{ width: '100%', height: '100%' }} resizeMode='contain' />
+                        <Image source={{uri: item.image}} style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }} resizeMode='contain' />
                     </View>
                     <Text style={styles.textM} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
                     {
                         item.preference && (
-                            <Text style={styles.textS} numberOfLines={1} ellipsizeMode='tail'>{item.preference}</Text>
+                            <Text style={styles.textS} numberOfLines={1} ellipsizeMode='tail'>{item.attribute}</Text>
                         )
                     }
                     <Text style={[styles.textM, { color: '#007537' }]}>{formatCurrency(item.price)}</Text>
@@ -42,20 +68,22 @@ const ListProd = (props) => {
             {title && (
                 <Text style={[styles.textL, {marginTop: 15}]}>{title}</Text>
             )}
-            {data && (
+            {type && (
                 <View style={{ marginTop: 15 }}>
                     <FlashList
-                        data={data}
+                        data={products}
                         renderItem={renderTrees}
                         numColumns={2}
                     />
                 </View>
             )}
+            {products.length === 0 && <Text>Không có sản phẩm nào</Text>}
             {more && (
                 <TouchableOpacity>
                     <Text style={[styles.textM, {textAlign:'right', textDecorationLine: 'underline'}]}>Xem thêm {more}</Text>
                 </TouchableOpacity>
             )}
+
         </View>
     )
 }

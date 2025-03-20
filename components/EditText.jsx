@@ -5,7 +5,8 @@ import { TextInput } from 'react-native-web'
 const EditText = (props) => {
     const {
         placeholder,
-        password
+        password,
+        value, valueChange
     } = props;
 
     const [isPassVisible, setIsPassVisible] = useState(!password);
@@ -16,7 +17,9 @@ const EditText = (props) => {
                 style={styles.input}
                 placeholder={placeholder}
                 placeholderTextColor={'#8B8B8B'}
-                secureTextEntry={!isPassVisible} />
+                secureTextEntry={!isPassVisible}
+                value={value}
+                onChangeText={valueChange} />
             {
                 password && (
                     <TouchableOpacity

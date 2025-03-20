@@ -1,11 +1,32 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Modal } from 'react-native'
 import React, { useState } from 'react';
 import EditText from '../components/EditText';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { useNavigation } from '@react-navigation/native';
+import userLogin from "@/helpers/user";
 
 const Logout = () => {
-    const [remember, setRemember] = useState(false);
+    const navigation = useNavigation();
+
+    const { register, loading, error, setError } = userLogin();
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [phone, setPhone] = useState("");
+    const [success, setSuccess] = useState(false);
+
+    const handleRegister = () => {
+        register(name, email, password, phone, (noToken) => {
+            console.log("Đăng ký thành công và kh có token");
+            setSuccess(true);
+
+            setTimeout(() => {
+                setSuccess(false);
+                navigation.goBack();
+            }, 1000);
+        });
+    };
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <View style={styles.imageContainer}>
@@ -13,7 +34,13 @@ const Logout = () => {
                     source={require('../assets/images/Ellipse.png')}
                     style={styles.image}
                 />
-                <TouchableOpacity style={styles.back}>
+                <TouchableOpacity style={styles.back} onPress={() => {
+                    if (navigation.canGoBack()) {
+                        navigation.goBack();
+                    } else {
+                        navigation.navigate('Login');
+                    }
+                }}>
                     <Image source={require('../assets/icons/arrow-right.png')}
                         style={{ width: 18, height: 18 }} />
                 </TouchableOpacity>
@@ -22,21 +49,29 @@ const Logout = () => {
                 <Text style={styles.textL}>Đăng ký</Text>
                 <Text style={styles.textM}>Tạo tài khoản</Text>
                 <EditText
-                    placeholder="Họ tên" />
+                    placeholder="Họ tên"
+                    value={name}
+                    valueChange={setName} />
                 <EditText
-                    placeholder="E-mail" />
+                    placeholder="E-mail"
+                    value={email}
+                    valueChange={setEmail} />
                 <EditText
-                    placeholder="Số điện thoại" />
+                    placeholder="Số điện thoại"
+                    value={phone}
+                    valueChange={setPhone} />
                 <EditText
                     placeholder="Mật khẩu"
-                    password={true} />
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, justifyContent: 'center', paddingHorizontal: 12, marginTop: 10}}>
+                    password={true}
+                    value={password}
+                    valueChange={setPassword} />
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, justifyContent: 'center', paddingHorizontal: 12, marginTop: 10 }}>
                     <Text style={styles.textS}>Để đăng ký tài khoản, bạn phải đồng ý</Text>
-                    <Text style={[styles.textS, {color: '#009245', textDecorationLine: 'underline'}]}>Terms & Conditions</Text>
+                    <Text style={[styles.textS, { color: '#009245', textDecorationLine: 'underline' }]}>Terms & Conditions</Text>
                     <Text style={styles.textS}>and</Text>
-                    <Text style={[styles.textS, {color: '#009245', textDecorationLine: 'underline'}]}>Privacy Policy</Text>
+                    <Text style={[styles.textS, { color: '#009245', textDecorationLine: 'underline' }]}>Privacy Policy</Text>
                 </View>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity style={styles.btn} onPress={handleRegister}>
                     <LinearGradient
                         colors={['#007537', '#4CAF50']} // Chuyển từ trắng sang đen
                         start={{ x: 0, y: 0 }} // Điểm bắt đầu (trắng)
@@ -64,11 +99,31 @@ const Logout = () => {
                 </View>
                 <View style={[styles.rowContainer, { gap: 5, marginVertical: 0 }]}>
                     <Text style={styles.textS}>Bạn đã có tài khoản</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Text style={[styles.textS, { color: '#009245' }]}>đăng nhập</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+            {/* Modal hiển thị lỗi */}
+            <Modal visible={!!error} transparent animationType="fade">
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+                    <View style={{ width: "80%", padding: 20, backgroundColor: "white", borderRadius: 10, alignItems: "center" }}>
+                        <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Lỗi</Text>
+                        <Text style={{ marginBottom: 15 }}>{error}</Text>
+                        <TouchableOpacity onPress={() => setError("")} style={{ padding: 10, backgroundColor: "red", borderRadius: 5 }}>
+                            <Text style={{ color: "white" }}>Đóng</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            <Modal visible={success} transparent animationType="fade">
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+                    <View style={{ width: "80%", padding: 20, backgroundColor: "white", borderRadius: 10, alignItems: "center" }}>
+                        <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Thông báo</Text>
+                        <Text style={{ marginBottom: 15 }}>Đăng ký thành công!</Text>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }

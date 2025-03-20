@@ -1,55 +1,11 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react';
 import ListProd from '@/components/ListProd';
+import { useNavigation } from '@react-navigation/native';
 
-
-const TREES = [
-    {
-        id: 1,
-        name: 'Spider Plant',
-        preference: 'Ưa bóng',
-        price: 250000,
-        img: require('@/assets/images/tree.png')
-    },
-    {
-        id: 2,
-        name: 'Spider Plant',
-        preference: 'Ưa bóng',
-        price: 250000,
-        img: require('@/assets/images/tree.png')
-    },
-    {
-        id: 3,
-        name: 'Spider Plant',
-        preference: 'Ưa bóng',
-        price: 250000,
-        img: require('@/assets/images/tree.png')
-    },
-    {
-        id: 4,
-        name: 'Spider Plant',
-        preference: 'Ưa bóng',
-        price: 250000,
-        img: require('@/assets/images/tree.png')
-    },
-    {
-        id: 5,
-        name: 'Spider Plant',
-        preference: 'Ưa bóng',
-        price: 250000,
-        img: require('@/assets/images/tree.png')
-    },
-    {
-        id: 5,
-        name: 'Spider Plant',
-        preference: 'Ưa bóng',
-        price: 250000,
-        img: require('@/assets/images/tree.png')
-    },
-];
 
 const Home = () => {
-    const [trees, setTrees] = useState(TREES);
+    const navigation = useNavigation();
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
@@ -69,24 +25,27 @@ const Home = () => {
             <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 15 }}>
                 <ListProd
                     title="Cây trồng"
-                    data={trees}
-                    more="Cây trồng" />
+                    type="Cây trồng"
+                    more="Cây trồng"
+                    onPress={(_id) => navigation.navigate('Detail', { _id })} />
                 <ListProd
                     title="Chậu cây trồng"
-                    data={trees}
-                    more="Chậu cây" />
+                    type="Chậu cây"
+                    more="Chậu cây" 
+                    onPress={(_id) => navigation.navigate('Detail', { _id })} />
                 <ListProd
                     title="Phụ kiện chăm sóc"
-                    data={trees}
-                    more="Phụ kiện" />
+                    type="Chậu cây"
+                    more="Phụ kiện" 
+                    onPress={(_id) => navigation.navigate('Detail', { _id })} />
                 <Text style={[styles.textL, {marginTop: 20}]}>Combo chăm sóc (mới)</Text>
-                <View style={styles.kitContainer}>
+                <TouchableOpacity style={styles.kitContainer}>
                     <View style={styles.textKit}>
                         <Text style={styles.textM}>Lemon Balm Grow Kit</Text>
                         <Text style={styles.textS} numberOfLines={3} ellipsizeMode='tail'>Gồm: hạt giống, Lemon Balm, gói đất hữu cơm chậu Planta, marker đánh dấu đó nha kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk</Text>
                     </View>
                     <Image source={require('@/assets/images/kit.png')} style={{width: 108, height: 134, borderTopRightRadius: 8, borderBottomRightRadius: 8}}/>
-                </View>
+                </TouchableOpacity>
             </View>
         </ScrollView>
     )
