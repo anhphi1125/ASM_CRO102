@@ -5,7 +5,7 @@ import Logout from './Logout';
 import Home from './Home';
 import BottomNavigation from './BottomNavigation';
 import Detail from './Detail';
-import Search from './Searcch';
+import Search from './Search';
 import AppNavigation from './Navigation';
 
 export default function Index() {

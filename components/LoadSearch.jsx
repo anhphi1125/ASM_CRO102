@@ -9,10 +9,12 @@ const LoadSearch = (props) => {
         img,
         name,
         price,
-        quantity
+        quantity,
+        onPress
     } = props
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container}
+        onPress={onPress}>
             {
                 img && (
                     <Image source={img} style={styles.img} />

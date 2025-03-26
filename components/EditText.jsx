@@ -1,6 +1,5 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import { TextInput } from 'react-native-web'
 
 const EditText = (props) => {
     const {
@@ -14,7 +13,7 @@ const EditText = (props) => {
     return (
         <View>
             <TextInput
-                style={styles.input}
+                style={styles.nhap}
                 placeholder={placeholder}
                 placeholderTextColor={'#8B8B8B'}
                 secureTextEntry={!isPassVisible}
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
         right: 15,
         top: 11
     },
-    input: {
+    nhap: {
         fontSize: 12,
         width: '100%',
         padding: 14,

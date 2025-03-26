@@ -7,7 +7,7 @@ import Logout from './Logout';
 import Home from './Home';
 import BottomNavigation from './BottomNavigation';
 import Detail from './Detail';
-import Searcch from './Searcch';
+import Search from './Search';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +20,7 @@ export default function AppNavigation() {
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <Stack.Screen name="BottomNav" component={BottomNavigation} options={{ headerShown: false }} />
             <Stack.Screen name="Detail" component={Detail} options={{ headerShown: false }} />
-            <Stack.Screen name="Search" component={Searcch} options={{ headerShown: false }} />
+            <Stack.Screen name="Search" component={Search} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 };
