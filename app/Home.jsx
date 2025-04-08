@@ -17,7 +17,7 @@ const Home = () => {
                         <Image source={require('../assets/icons/fi_arrow-right.png')} style={styles.icon} />
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.rounded}>
+                <TouchableOpacity style={styles.rounded} onPress={() => navigation.navigate("Cart")}>
                     <Image source={require('../assets/icons/shopping-cart.png')} style={styles.icon} />
                 </TouchableOpacity>
                 <Image source={require('../assets/images/banner-tree.png')} style={styles.banner} />
@@ -27,16 +27,19 @@ const Home = () => {
                     title="Cây trồng"
                     type="Cây trồng"
                     more="Cây trồng"
+                    onPressMore={(more) => navigation.navigate('Regular', {more})}
                     onPress={(_id) => navigation.navigate('Detail', { _id })} />
                 <ListProd
                     title="Chậu cây trồng"
                     type="Chậu cây"
                     more="Chậu cây" 
+                    onPressMore={(more) => navigation.navigate('Regular', {more})}
                     onPress={(_id) => navigation.navigate('Detail', { _id })} />
                 <ListProd
                     title="Phụ kiện chăm sóc"
                     type="Chậu cây"
                     more="Phụ kiện" 
+                    onPressMore={(more) => navigation.navigate('Regular', {more})}
                     onPress={(_id) => navigation.navigate('Detail', { _id })} />
                 <Text style={[styles.textL, {marginTop: 20}]}>Combo chăm sóc (mới)</Text>
                 <TouchableOpacity style={styles.kitContainer}>

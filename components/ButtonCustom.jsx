@@ -4,8 +4,8 @@ import React from 'react'
 const ButtonCustom = (props) => {
     const {
         left, right,
-        minus, plus, minusColor,
-        btn, btnColor,
+        minus, plus, minusColor, size,
+        btn, btnColor, btnRight,
         onPress
     } = props
     return (
@@ -31,21 +31,32 @@ const ButtonCustom = (props) => {
             {
                 minus && (
                     <TouchableOpacity onPress={onPress}>
-                        <Image source={require('../assets/icons/minus-square.png')} style={[{ width: 30, height: 30, tintColor: minusColor }]} />
+                        <Image source={require('../assets/icons/minus-square.png')} style={[{ width: size ? size : 30, height: size ? size : 30, tintColor: minusColor }]} />
                     </TouchableOpacity>
                 )
             }
             {
                 plus && (
                     <TouchableOpacity onPress={onPress}>
-                        <Image source={require('../assets/icons/plus-square.png')} style={{ width: 30, height: 30 }} />
+                        <Image source={require('../assets/icons/plus-square.png')} style={{ width: size ? size : 30, height: size ? size : 30 }} />
                     </TouchableOpacity>
                 )
             }
             {
                 btn && (
                     <TouchableOpacity onPress={onPress} style={[styles.btnContainer, {backgroundColor: btnColor}]}>
-                        <Text style={styles.textBtn}>{btn}</Text>
+                        <Text style={[styles.textBtn,
+                            btnRight && {textAlign: 'left'}
+                        ]}>{btn}</Text>
+                        {
+                            btnRight && (
+                                <Image source={require('@/assets/icons/right.png')} style={{
+                                    width: 24, height: 24,
+                                    position: 'absolute',
+                                    right: 30,
+                                }}/>
+                            )
+                        }
                     </TouchableOpacity>
                 )
             }
@@ -54,7 +65,7 @@ const ButtonCustom = (props) => {
     )
 }
 
-export default ButtonCustom
+export default ButtonCustom;
 
 const styles = StyleSheet.create({
     textBtn: {
@@ -64,7 +75,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     btnContainer: {
-        padding: 15,
+        paddingVertical: 15,
+        paddingHorizontal: 30,
         backgroundColor: '#ABABAB',
         width: '100%',
         borderRadius: 8

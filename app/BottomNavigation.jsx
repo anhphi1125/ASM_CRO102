@@ -3,6 +3,8 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './Home';
 import Seach from './Search';
+import Profile from './Profile';
+
 const Tab = createBottomTabNavigator();
 
 const BottomNavigation = () => {
@@ -89,7 +91,7 @@ const BottomNavigation = () => {
             />
             <Tab.Screen
                 name='User'
-                component={Home}
+                component={Profile}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>

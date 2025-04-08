@@ -10,7 +10,10 @@ const ListProd = (props) => {
         title,
         onPress,
         more,
-        type
+        isLarge,
+        type,
+        onPressMore,
+        attribute,
     } = props;
 
     const [products, setProducts] = useState([]);
@@ -20,8 +23,16 @@ const ListProd = (props) => {
         const getProduct = async () => {
             try {
                 setLoading(true);
-                const res = await AxiosInstance().get(`prod/prodByType?type=${type}`);
+                let res = null;
 
+                if (type){
+                    res = await AxiosInstance().get(`prod/prodByType?type=${type}`);
+                    console.log("typetype nè: ", res);
+                }else if (attribute){
+                    res = await AxiosInstance().get(`prod/prodByAttribute?attribute=${attribute}`);
+                    console.log("attribute nè: ", res);
+                }
+                
                 if(res && res.products){
                     setProducts(res.products);
                 }else{
@@ -34,14 +45,14 @@ const ListProd = (props) => {
             }
         };
         getProduct();
-    }, [type]);
+    }, [type, attribute]);
 
     const formatCurrency = (amount) => {
         return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ";
     };
 
     const renderTrees = ({ item, index }) => {
-        if (index <= 5) {
+     
             return (
                 <TouchableOpacity style={[styles.prodContainer,
                 index % 2 != 0 && { position: 'absolute', right: 0 }
@@ -61,17 +72,25 @@ const ListProd = (props) => {
 
                 </TouchableOpacity>
             );
-        }
     };
     return (
-        <View>
+        <View style={isLarge && {flex: 1}}>
             {title && (
                 <Text style={[styles.textL, {marginTop: 15}]}>{title}</Text>
             )}
             {type && (
-                <View style={{ marginTop: 15 }}>
+                <View style={{ marginTop: 15, flex: 1 }}>
                     <FlashList
-                        data={products}
+                        data={isLarge ? products : products.slice(0, 6)}
+                        renderItem={renderTrees}
+                        numColumns={2}
+                    />
+                </View>
+            )}
+            {attribute && (
+                <View style={{ marginTop: 15, flex: 1 }}>
+                    <FlashList
+                        data={isLarge ? products : products.slice(0, 6)}
                         renderItem={renderTrees}
                         numColumns={2}
                     />
@@ -79,7 +98,7 @@ const ListProd = (props) => {
             )}
             {products.length === 0 && <Text>Không có sản phẩm nào</Text>}
             {more && (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => onPressMore(more)}>
                     <Text style={[styles.textM, {textAlign:'right', textDecorationLine: 'underline'}]}>Xem thêm {more}</Text>
                 </TouchableOpacity>
             )}
