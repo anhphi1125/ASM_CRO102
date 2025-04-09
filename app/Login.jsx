@@ -61,6 +61,8 @@ const Login = () => {
       "1090583178379-9h6aadoom5sl03145rflh9vus1ujh2a4.apps.googleusercontent.com",
     webClientId:
       "1090583178379-bsv7d88q5vcak7mraf85e5t9e24p94m8.apps.googleusercontent.com",
+    iosClientId:
+      "1090583178379-dpa49drko7r7t1a2gai0pdrtr0mgoj80.apps.googleusercontent.com",
   });
 
   //xử lý phản hồi từ Google
