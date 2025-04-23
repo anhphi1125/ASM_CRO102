@@ -10,7 +10,6 @@ import Detail from './Detail';
 import Search from './Search';
 import Cart from './Cart';
 import Payment from './Payment';
-import About from './AboutCreen';
 
 const Stack = createStackNavigator();
 

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const AxiosInstance = (token = '', contentType = 'application/json') => {
     const axiosInstance = axios.create({
-        baseURL: 'http://localhost:3001/'
+        baseURL: 'https://apicro102.onrender.com/'
     });
 
     // cmd -----> ipconfig -----> IPv4 Address (192.168.1.1)
