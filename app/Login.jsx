@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   Modal,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import EditText from "../components/EditText";
@@ -15,6 +16,8 @@ import { Login as loginAction } from "../slices/AuthSlice";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import AxiosInstance from "@/helpers/AxiosInstance";
+import * as Facebook from 'expo-auth-session/providers/facebook';
+
 
 const Login = () => {
   const navigation = useNavigation();
@@ -98,8 +101,36 @@ const Login = () => {
     }
   }
 
+  //login bằng facebook
+  const [req, res, promptAsyncFace] = Facebook.useAuthRequest({
+      clientId: '683775737682213', // App ID của bạn
+    });
+  
+    const [userInfoFace, setUserInfoFaceFace] = useState(null);
+  
+    useEffect(() => {
+      if (res?.type === 'success') {
+        const { access_token } = res.params;
+        console.log('✅ Token nhận được:', access_token);
+        fetchFacebookUserInfo(access_token);
+      }
+    }, [res]);
+  
+    const fetchFacebookUserInfo = async (token) => {
+      try {
+        const response = await fetch(
+          `https://graph.facebook.com/me?fields=id,name,email,picture.type(large)&access_token=${token}`
+        );
+        const data = await response.json();
+        setUserInfoFaceFace(data);
+        console.log('📘 Thông tin người dùng:', data);
+      } catch (error) {
+        console.error('❌ Lỗi khi lấy thông tin người dùng:', error);
+      }
+    };
+
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
+    <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.imageContainer}>
         <Image
           source={require("../assets/images/Ellipse.png")}
@@ -177,7 +208,7 @@ const Login = () => {
               style={{ width: 32, height: 32 }}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => promptAsyncFace()}>
             <Image
               source={require("@/assets/icons/facebook.png")}
               style={{ width: 32, height: 32 }}
@@ -257,7 +288,7 @@ const Login = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 };
 

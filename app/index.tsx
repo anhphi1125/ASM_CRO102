@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Text, View, Platform } from "react-native";
+import { Text, View, Platform, Image } from "react-native";
 import Login from './Login';
 import Logout from './Logout';
 import Home from './Home';
@@ -12,6 +12,7 @@ import Profile from '../app/Profile';
 import Regular from '../app/Regular';
 import Payment from '../app/Payment';
 import Cart from './Cart';
+import FaceLogin from '../components/FaceLogin';
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { EventSubscription } from 'expo-modules-core';
@@ -26,6 +27,8 @@ Notifications.setNotificationHandler({
 
 export default function Index() {
   const [expoPushToken, setExpoPushToken] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [message, setMessage] = useState("");
   const notificationListener = useRef<EventSubscription | null>(null);
 const responseListener = useRef<EventSubscription | null>(null);
 
@@ -43,6 +46,16 @@ const responseListener = useRef<EventSubscription | null>(null);
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification: any) => {
         console.log("🔔 Notification received:", notification);
+        const image = notification?.request?.content?.data?.image;
+        const body = notification?.request?.content?.body;
+        if (image) setImageUrl(image);
+      if (body) setMessage(body);
+
+      // Ẩn sau 2 giây
+      setTimeout(() => {
+        setImageUrl("");
+        setMessage("");
+      }, 2000);
       });
 
     // User tapped notification
@@ -62,8 +75,20 @@ const responseListener = useRef<EventSubscription | null>(null);
       };
   }, []);
   return (
-      <Component/>
-    
+    <View style={{ flex: 1 }}>
+    <AppNavigation />
+    {imageUrl ? (
+      <View style={{ padding: 16, alignItems: 'center' }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>Ảnh từ Notification</Text>
+        <Image
+          source={{ uri: imageUrl }}
+          style={{ width: 300, height: 200, borderRadius: 8 }}
+          resizeMode="cover"
+        />
+        <Text style={{ marginTop: 10 }}>{message}</Text>
+      </View>
+    ) : null}
+  </View>
   );
 }
 
